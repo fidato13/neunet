@@ -1,4 +1,4 @@
-###Currying 
+## Currying 
 
 Comes from Functional programming concepts:
 
