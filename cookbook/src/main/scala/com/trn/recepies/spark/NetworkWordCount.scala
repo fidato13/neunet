@@ -2,6 +2,9 @@ package com.trn.recepies.spark
 
 import org.apache.spark.sql.SparkSession
 
+/**
+  * Structured Streaming word Count example
+  */
 object NetworkWordCount extends App {
 
   val spark: SparkSession = SparkSession
