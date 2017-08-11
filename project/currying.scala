@@ -13,4 +13,5 @@ object HelloBuild extends Build {
                           base = file("cookbook"))
     lazy val akka = Project(id = "akka",
       base = file("akka"))
+
 }
