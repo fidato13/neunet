@@ -1,8 +1,13 @@
 package com.trn.spark.scraper.util
 
 import com.markmonitor.aviator.common.utils.ConfigurationAdapter
+import com.markmonitor.aviator.common.writable.LinkInterface
+import com.markmonitor.aviator.plugins.plugin.parser.FetcherPlugin
 import com.markmonitor.aviator.plugins.plugin.{PluginsToConfiguration, ScraperPluginFactory, ScraperPlugins}
+import com.markmonitor.aviator.plugins.utils.HTTPRequestImpl.HTTPRequestFactory
+import com.markmonitor.aviator.plugins.utils.{HTTPRequest, Link}
 import org.apache.hadoop.conf.Configuration
+
 
 object Helper {
 
@@ -26,5 +31,20 @@ object Helper {
       * This scraper Plugin is built for whole of partition ... next we will fetch plugin for every record in every partition.
       */
     pluginFactory.getPlugins
+  }
+
+  def fetchUrlResponse(record: (String, String))( implicit scraperPlugins: ScraperPlugins) = {
+    //create a linkInterface object... ie link object
+    val link: LinkInterface = new Link
+    link.setUrl(record._2)
+    link.setLinkAbstract(record._1)
+
+
+    val fetcherPlugin: FetcherPlugin = scraperPlugins.getFetcherPlugin(link.getUrl)
+
+
+    val httpReq: HTTPRequest = HTTPRequestFactory.create(fetcherPlugin,link)
+    (link.getUrl,httpReq.fetch(link))
+
   }
 }

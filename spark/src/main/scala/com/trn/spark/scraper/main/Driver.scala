@@ -21,6 +21,8 @@ object Driver extends App{
   val rddFile: RDD[(String, String)] = sc.textFile("spark/src/main/resources/urls.txt").map(x => (x.split(",")(0) , x.split(",")(1)))
 
 
+  implicit val scraperPlugins: ScraperPlugins = getScraperPlugins
+
   /**
     * Scraper Plugins contains all the plugins...
     * Fetcher Plugin is for that particular type of url
@@ -37,30 +39,7 @@ object Driver extends App{
     * for every link we have to download the source
     */
 
-  val downloadedRdd: RDD[(String, HTTPResponse)] = rddFile.mapPartitions { partition: Iterator[(String, String)] =>
+  val downloadedRdd: RDD[(String, HTTPResponse)] = rddFile.map {fetchUrlResponse}
 
-    val scraperPlugins: ScraperPlugins = getScraperPlugins
-
-    /**
-      * Evaluate this partition ... then create a new partition which has fetcher plugin from above scraperPlugins
-      */
-    val newPartition: Iterator[(String, HTTPResponse)] = partition.map{ record: (String, String) =>
-      //create a linkInterface object... ie link object
-      val link: LinkInterface = new Link
-      link.setUrl(record._2)
-      link.setLinkAbstract(record._1)
-
-
-      val fetcherPlugin: FetcherPlugin = scraperPlugins.getFetcherPlugin(link.getUrl)
-
-
-      val httpReq: HTTPRequest = HTTPRequestFactory.create(fetcherPlugin,link)
-      (link.getUrl,httpReq.fetch(link))
-
-    }
-
-    newPartition.toIterator // remove this
-  }
-
-  downloadedRdd.foreach(x => println(s"Each new row is => ${x._2.getContent}"))
+  downloadedRdd.foreach(x => println(s"Each new row is => ${x._2.getResponseCode}"))
 }
