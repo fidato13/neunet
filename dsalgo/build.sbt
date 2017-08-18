@@ -1,4 +1,4 @@
-name := "Spark-Core"
+name := "Ds-algo"
 
 version := "0.1"
 

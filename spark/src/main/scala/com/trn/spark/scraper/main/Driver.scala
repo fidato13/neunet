@@ -1,13 +1,10 @@
 package com.trn.spark.scraper.main
 
-import com.markmonitor.aviator.common.writable.LinkInterface
 import com.markmonitor.aviator.plugins.plugin.ScraperPlugins
-import com.markmonitor.aviator.plugins.plugin.parser.FetcherPlugin
-import com.markmonitor.aviator.plugins.utils.HTTPRequestImpl.HTTPRequestFactory
-import com.markmonitor.aviator.plugins.utils.{HTTPRequest, HTTPResponse, Link}
+import com.markmonitor.aviator.plugins.utils.HTTPResponse
+import com.trn.spark.scraper.util.Helper._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-import com.trn.spark.scraper.util.Helper._
 
 
 object Driver extends App{
