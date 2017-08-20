@@ -20,11 +20,12 @@ class RemoteScript(text: String) extends Command {
   val port = config.getInt(s"app.remote.$command.port")
   val username =  config.getString(s"app.remote.$command.username")
   val password =  config.getString(s"app.remote.$command.password")
+  val key =  config.getString(s"app.remote.$command.key")
 
 
   override def action: String = {
     //create remote Config object
-    val remoteConfig = RemoteConfig(username, password, host, port, path)
+    val remoteConfig = RemoteConfig(username, password, host, port, path, key)
     //send the execution response
     remoteExecuteScript(remoteConfig).outStream.mkString("\n")
   }

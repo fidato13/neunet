@@ -16,17 +16,18 @@ object Endpoints {
   val pathCMD = "cmd"
   //val postedCommand: Endpoint[Command] = body.as[Command]
 
-  val postCommandsFromSlack:Endpoint[String] = post(pathCMD :: param("text").as[String] :: param("user_name").as[String]) { (message: String, user: String) =>
+  val postCommandsFromSlack: Endpoint[String] =
+    post(pathCMD :: param("text").as[String] :: param("user_name").as[String]) { (message: String, user: String) =>
 
-    // process command
-    val command: Command = buildCommand(message)
-    val response = command.response
+      // process command
+      val command: Command = buildCommand(message)
+      val response = command.response
 
 
-    postToSlackDummy(s"Hey @$user!, $response")
-    Ok("")
+      postToSlack(s"Hey @$user!, $response")
+      Ok("")
 
-  }
+    }
 
   // Endpoints
   val combined = postCommandsFromSlack //:+: getINRTransfer

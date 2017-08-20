@@ -6,7 +6,7 @@ import scalaj.http.{Http, HttpOptions}
 
 object CommandProcessing {
 
-  def postToSlackDummy(message: String) = {
+  def postToSlack(message: String) = {
 
     val jsonMessage = s"""{"text": "$message"}"""
 
@@ -18,9 +18,12 @@ object CommandProcessing {
   }
 
   def supportedRemoteExecution(text: String): (Boolean, String) = text match {
-      case "trn remote-execute command1" => (true, "command1")
-      case "trn remote-execute command2" => (true, "command2")
-      case "trn remote-execute command3" => (true, "command3")
+      case "trn remote-execute restart-hbase-indexer-master1" => (true, "restart-hbase-indexer-master1")
+      case "trn remote-execute restart-listener-normal-master1" => (true, "restart-listener-normal-master1")
+      case "trn remote-execute restart-listener-realtime-master1" => (true, "restart-listener-realtime-master1")
+      case "trn remote-execute restart-hbase-indexer-master2" => (true, "restart-hbase-indexer-master2")
+      case "trn remote-execute restart-listener-normal-master2" => (true, "restart-listener-normal-master2")
+      case "trn remote-execute restart-listener-realtime-master2" => (true, "restart-listener-realtime-master2")
       case _ => (false, "")
     }
 
