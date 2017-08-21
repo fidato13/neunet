@@ -8,6 +8,6 @@ echo "Restarting Hbase-indexer on master1..."
 screen -S 2750.pts-0.ip-10-90-162-79 -p 3 -X stuff $'\003'
 
 #Execute main command, the below line needs to be modified with the actual command, `echo -ne '\015'` sends Enter
-screen -S 2750.pts-0.ip-10-90-162-79 -p 3 -X stuff 'command'`echo -ne '\015'`
+screen -S 2750.pts-0.ip-10-90-162-79 -p 3 -X stuff './hbase-indexer.sh 5000'`echo -ne '\015'`
 
 exit 0

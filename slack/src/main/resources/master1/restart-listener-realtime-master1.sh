@@ -8,6 +8,6 @@ echo "Restarting listener-realtime on master1..."
 screen -S 2750.pts-0.ip-10-90-162-79 -p 2 -X stuff $'\003'
 
 #Execute main command, the below line needs to be modified with the actual command, `echo -ne '\015'` sends Enter
-screen -S 2750.pts-0.ip-10-90-162-79 -p 2 -X stuff 'command'`echo -ne '\015'`
+screen -S 2750.pts-0.ip-10-90-162-79 -p 2 -X stuff './run-listener-realtime.sh'`echo -ne '\015'`
 
 exit 0
