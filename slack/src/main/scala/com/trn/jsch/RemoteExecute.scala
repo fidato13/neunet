@@ -45,8 +45,12 @@ object RemoteExecute /*extends App*/ {
          */
       val session = jsch.getSession(config.username, config.host, config.port)
       session.setConfig("StrictHostKeyChecking", "no")
-      //session.setPassword(config.password)
-      jsch.addIdentity(config.key)
+      config.key.length match {
+        case 0  => session.setPassword(config.password) //sandbox
+        case _ => jsch.addIdentity(config.key)//prod
+      }
+      //session.setPassword(config.password) // comment this for prod servers
+      //jsch.addIdentity(config.key) // un-comment this prod servers
       session.connect
 
       //create the excution channel over the session

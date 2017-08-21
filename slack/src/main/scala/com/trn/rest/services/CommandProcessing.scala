@@ -1,6 +1,6 @@
 package com.trn.rest.services
 
-import com.trn.rest.commands.{Command, Joke, RemoteScript, UnSupported}
+import com.trn.rest.commands._
 
 import scalaj.http.{Http, HttpOptions}
 
@@ -17,6 +17,15 @@ object CommandProcessing {
       .option(HttpOptions.readTimeout(10000)).asString
   }
 
+  def isAuthoizedUser(user: String, team: String): Boolean = {
+    (user,team) match {
+      case ("tarunk","T043G0AGW") => true
+      case ("luca.zanconato","T043G0AGW") => true
+      case ("pawel","T043G0AGW") => true
+      case _ => false
+    }
+  }
+
   def supportedRemoteExecution(text: String): (Boolean, String) = text match {
       case "trn remote-execute restart-hbase-indexer-master1" => (true, "restart-hbase-indexer-master1")
       case "trn remote-execute restart-listener-normal-master1" => (true, "restart-listener-normal-master1")
@@ -24,6 +33,9 @@ object CommandProcessing {
       case "trn remote-execute restart-hbase-indexer-master2" => (true, "restart-hbase-indexer-master2")
       case "trn remote-execute restart-listener-normal-master2" => (true, "restart-listener-normal-master2")
       case "trn remote-execute restart-listener-realtime-master2" => (true, "restart-listener-realtime-master2")
+      case "trn remote-execute restart-screen0-sandbox" => (true, "restart-screen0-sandbox")
+      case "trn remote-execute restart-screen1-sandbox" => (true, "restart-screen1-sandbox")
+      case "trn remote-execute restart-screen2-sandbox" => (true, "restart-screen2-sandbox")
       case _ => (false, "")
     }
 
@@ -44,7 +56,7 @@ object CommandProcessing {
     }
   }
 
-  def buildCommand(text: String): Command = {
+  def buildCommand(text: String, user: String, team: String): Command = {
     // This will parse the text string and will create the appropriate command object
     val listText: List[String] = text.split(" ").filterNot(_ == "trn").map(_.toLowerCase).toList
 
@@ -56,10 +68,15 @@ object CommandProcessing {
     keyword match {
       case "joke" => new Joke(text)
       case "remote-execute" => { // for this we will use the script name if matches
-        val isSupported = supportedRemoteExecution(text)
-        isSupported._1 match {
-          case false => new UnSupported
-          case true => new RemoteScript(isSupported._2)
+        if (isAuthoizedUser(user, team)) {
+          val isSupported: (Boolean, String) = supportedRemoteExecution(text)
+          isSupported._1 match {
+            case false => new UnSupported
+            case true => new RemoteScript(isSupported._2)
+          }
+        }
+        else {
+          new UnAuthorized
         }
       }
       case _ => new UnSupported

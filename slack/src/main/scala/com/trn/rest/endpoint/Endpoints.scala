@@ -17,10 +17,10 @@ object Endpoints {
   //val postedCommand: Endpoint[Command] = body.as[Command]
 
   val postCommandsFromSlack: Endpoint[String] =
-    post(pathCMD :: param("text").as[String] :: param("user_name").as[String]) { (message: String, user: String) =>
+    post(pathCMD :: param("text").as[String] :: param("user_name").as[String] :: param("team_id").as[String]) { (message: String, user: String, team: String) =>
 
       // process command
-      val command: Command = buildCommand(message)
+      val command: Command = buildCommand(message, user, team)
       val response = command.response
 
 
