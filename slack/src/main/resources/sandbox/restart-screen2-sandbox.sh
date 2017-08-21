@@ -8,6 +8,6 @@ echo "Restarting screen2 on fidato/sandbox..."
 screen -S 13418.tempscreen -p 2 -X stuff $'\003'
 
 #Execute main command, the below line needs to be modified with the actual command, `echo -ne '\015'` sends Enter
-screen -S 13418.tempscreen -X stuff 'date'`echo -ne '\015'`
+screen -S 13418.tempscreen -X -p 2 stuff 'date'`echo -ne '\015'`
 
 exit 0
