@@ -19,11 +19,16 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.8.0",
   "io.circe" %% "circe-parser" % "0.8.0",
   "com.typesafe.play" % "play-json_2.11" % "2.6.3",
-  "com.jcraft" % "jsch" % "0.1.54"
+  "com.jcraft" % "jsch" % "0.1.54",
+  "com.trn" %% "nlp" % "0.1",
+  "org.apache.solr" % "solr-solrj" % "5.5.2" 
 
 )
 
-resolvers += "Local Maven Repository" at "file:///"+Path.userHome+"/.m2/repository"
+val mvnLocal = "Local Maven Repository" at "file:///"+Path.userHome+"/.m2/repository"
+
+val ivyLocal = Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
+//externalResolvers := Seq(ivyLocal, mvnLocal)
 
 enablePlugins(JavaAppPackaging)
 

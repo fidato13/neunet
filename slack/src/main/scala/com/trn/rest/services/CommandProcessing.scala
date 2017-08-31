@@ -11,7 +11,22 @@ object CommandProcessing {
     val jsonMessage = s"""{"text": "$message"}"""
 
     //post to slack
+    // trn-dev https://hooks.slack.com/services/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
+    //trn-test https://hooks.slack.com/services/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
     Http("https://hooks.slack.com/services/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").postData(jsonMessage)
+      .header("Content-Type", "application/text")
+      .header("Charset", "UTF-8")
+      .option(HttpOptions.readTimeout(10000)).asString
+  }
+
+  def postToSlackSolr(message: String) = {
+
+    val jsonMessage = s"""{"text": "$message"}"""
+
+    //post to slack
+    // trn-dev https://hooks.slack.com/services/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
+    //trn-test https://hooks.slack.com/services/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
+    Http("https://hooks.slack.com/services/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").postData(jsonMessage)
       .header("Content-Type", "application/text")
       .header("Charset", "UTF-8")
       .option(HttpOptions.readTimeout(10000)).asString

@@ -1,13 +1,19 @@
 package com.trn.rest.endpoint
 
+
 import com.trn.rest.commands.Command
 import io.circe.{Encoder, Json}
 import io.finch._
 import io.finch.circe._
 import com.trn.rest.services.CommandProcessing._
+import com.trn.nlp.understand.verb.VerbList._
+import com.trn.nlp.understand.Initialization._
+import com.trn.solr.SolrMonitor._
 
 object Endpoints {
 
+  val pathSolr = "solr"
+  val pathVerb = "verb"
   val pathRaw = "raw"
   val pathTransfer = "transfer"
   val pathINR = "INR"
@@ -29,8 +35,20 @@ object Endpoints {
 
     }
 
+  //  http://localhost:7070/solr
+  val checkSolr: Endpoint[String] = get(pathSolr) {
+
+    //chek if solr shards are up and running
+    ifAllShardsAreUp match {
+      case true => println("All shards are up!")//do nothing
+      case false => postToSlackSolr("<!channel> Some of the Solr shards are down, you might wanna have a look!")// post to slack
+    }
+
+    Ok("")
+  }
+
   // Endpoints
-  val combined = postCommandsFromSlack //:+: getINRTransfer
+  val combined = postCommandsFromSlack :+: checkSolr
 
   /**
     * sample Endpoint :
