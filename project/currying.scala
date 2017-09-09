@@ -3,7 +3,7 @@ import Keys._
 
 object HelloBuild extends Build {
   lazy val root = Project(id = "currying",
-    base = file(".")) aggregate(scala_core, spark_core, cookbook, akka, dsalgo,slack,nlp,facebook)
+    base = file(".")) aggregate(scala_core, spark_core, cookbook, akka, dsalgo,slack,nlp,facebook,deep_learning)
 
   lazy val scala_core = Project(id = "scala_core",
     base = file("scala"))
@@ -21,5 +21,7 @@ object HelloBuild extends Build {
     base = file("nlp"))
   lazy val facebook = Project(id = "facebook",
     base = file("facebook"))
+  lazy val deep_learning = Project(id = "deep-learning",
+    base = file("deep-learning"))
 
 }

@@ -1,4 +1,4 @@
-name := "neunet"
+name := "deep-learning"
 
 version := "0.1"
 
