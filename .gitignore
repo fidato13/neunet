@@ -6,4 +6,4 @@
 /target/
 .idea/
 .DS_Store
-/.ipynb_checkpoints
+notebooks-applied/.ipynb_checkpoints/
