@@ -1,0 +1,75 @@
+package com.trn.nlp2.understand.processing
+
+import com.trn.nlp2.understand.Initialization._
+import com.trn.nlp2.understand.model.{DatasetRecord, InputRecord}
+import com.trn.nlp2.understand.util.ExternalFile._
+
+/**
+  * This class is used to represent the list of common words between the passed user input and a record in dataset(memory)
+  * @param listCommonWords
+  * @param datasetRecord
+  * @param inputRecord
+  */
+case class Similar(val noOfMachedWords: Int, val listCommonWords: List[String], val datasetRecord: DatasetRecord, val inputRecord: InputRecord)
+
+object Parse extends App {
+  
+  def isSingleCommonWord(word: String): Boolean = {
+    /**
+      * This method will provide a boolean for 'Similar' entries from the list, which does only have a matched word of 1 and have any of the common words
+      * a,an,the,he,she,it
+      */
+    val commonWordList = List("a","an","the","he","she","it", "we", "i", "you")
+    commonWordList.contains(word)
+  }
+
+  def sampleSimilarRecords = {
+    /**
+      * Find those 'Similar' Records who have the same order of occurence of/as matched words both in Dataset and user Input records
+      * Few scores/ratings that we would be considering for every similar record:
+      * matchedWordScrore => depends upon no of matched Words
+      * RelativeorderScore => Relative order of matched word is similar to userInput word 
+      */
+  }
+  
+  def extractSuitableRecordListFromDataset(completeDataset: List[DatasetRecord], userInput: InputRecord): List[Similar] = {
+    /**
+      * take complete dataset and find relevant records(having common words between user supplied input and the dataset records so that the dataset record can be used as a template) as per the user input,... 
+      * with more common words .. we will assign our confidence rating to each stage so that we can lookup other sources when rating is low
+      */
+
+    completeDataset.flatMap { datasetRecord =>
+
+      val listCommonWords: List[String] = datasetRecord.listWords.intersect(userInput.listWords)
+      val numberOfMatchedWords = listCommonWords.size
+      numberOfMatchedWords match { // if there are some records in the list then 
+        case 0 => None
+        case 1 => isSingleCommonWord(listCommonWords.head) match {
+          case true => None
+          case false => Some(Similar(numberOfMatchedWords, listCommonWords, datasetRecord, userInput))
+        }
+        case _ => Some(Similar(numberOfMatchedWords, listCommonWords, datasetRecord, userInput))
+      }
+    }.sortWith(_.noOfMachedWords > _.noOfMachedWords)
+
+  }
+
+  /** Also, everyword in a sentence should get matched, Implies, for ever word in the user input, we should have a record in our dataset featuring that word!
+    * 1. The more matching words any 'Similar' record has, more are its chances to be used as template
+    * 2. The relative order of found/matched words with that of present in input record ...should be same as this would give us more confidence...else there would be lesser
+    * 3. Position of found words in Dataset and position of the found word in the user input , if they are same ...then it would give us more confidence
+    * 4. If the max number of found words in the complete list[Similar] are lesser than the total words present in the user Input then we can look for lower ranked Similar classes for finding out the importance of not matched words.
+    * 5. While sampling out from the List[Similar] based on the number of matched words , we have to cover for all the words by looking at other lower ranked classes...if the words could not be found there...then we would have to look in the reference files of verb,noun etc to know what those words could be!
+    *
+    */
+
+  // this is the entry point
+  //firstly write to file, to capture and learn from it
+  writeToFile(userInputSimulation.sentence)
+  
+  val listSimilar = extractSuitableRecordListFromDataset(buildDataset, userInputSimulation)
+  listSimilar.foreach(println)
+
+ 
+
+}
