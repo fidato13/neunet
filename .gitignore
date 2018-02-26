@@ -324,3 +324,12 @@ crawl_scrape*/
 a.html
 *.zip
 
+/RUNNING_PID
+/logs/
+/project/*-shim.sbt
+/project/project/
+/project/target/
+/target/
+.idea/
+.DS_Store
+notebooks-applied/.ipynb_checkpoints/
